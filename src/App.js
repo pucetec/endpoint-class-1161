@@ -1,23 +1,43 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-function App() {
+const App = () => {
+  const [user, setUser] = useState([]);
+
+  useEffect(()=> {
+    const fetchUsers = async () => {
+      const tempUsers = await axios.get("https://jsonplaceholder.typicode.com/users");
+      console.log({data: tempUsers.data});
+      setUser(tempUsers.data);
+    };
+    fetchUsers();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header className="App-header">Lista de usuarios</header>
+      <table>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Telefono</th>
+          <th>Direccion</th>
+        </tr>
+        {user.map((user, index)=>(
+          <tr>
+            <td>{user.id}</td>
+            <td>{user.name}</td>
+            <td>{user.username}</td>
+            <td>{user.email}</td>
+            <td>{user.phone}</td>
+            <td>{user.address.city}</td>
+          </tr>
+        ))}
+      </table>
     </div>
   );
 }
